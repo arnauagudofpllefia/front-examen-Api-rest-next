@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Projecte Examen: Frontend Next.js (API Externa)
 
-## Getting Started
+Aquest repositori conte nomes el client Next.js.
 
-First, run the development server:
+El backend API REST esta en un altre repositori i aquest frontend el consumeix amb fetch.
+
+## Estructura
+
+- `src/app/` Frontend Next.js
+- `src/lib/api.js` client de consum de l'API externa
+
+## Requisits
+
+- Node.js 18+ (recomanat 20+)
+- npm
+
+## Variables d'entorn
+
+Client (`.env.local`):
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
+```
+
+## Instal·lacio
+
+```bash
+npm install
+```
+
+## Execucio local
+
+Terminal (web):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Frontend local: `http://localhost:3000`
+API local externa: `http://localhost:3001` (o la URL que tingui el teu backend)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Endpoints API consumits
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Base URL local: `http://localhost:3001`
 
-## Learn More
+### 1) GET /api/bacalla
 
-To learn more about Next.js, take a look at the following resources:
+Retorna tot el llistat.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Exemple resposta 200:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+[
+	{
+		"id": 1,
+		"nom": "Bacalla d'Islandia premium",
+		"origen": "Islandia",
+		"tipus": "Salat sencer",
+		"descripcio": "Lloms gruixuts de textura ferma..."
+	}
+]
+```
 
-## Deploy on Vercel
+### 2) GET /api/bacalla/:id
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Retorna el detall per id.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Exemple 404:
+
+```json
+{
+	"message": "Varietat de bacalla no trobada"
+}
+```
+
+### 3) POST /api/bacalla
+
+Crea una nova varietat (id generat pel backend extern).
+
+Body JSON requerit:
+
+```json
+{
+	"nom": "Bacalla gourmet",
+	"origen": "Noruega",
+	"tipus": "Dessalat",
+	"descripcio": "Textura suau i sabor net."
+}
+```
+
+Resposta 201:
+
+```json
+{
+	"id": 6,
+	"nom": "Bacalla gourmet",
+	"origen": "Noruega",
+	"tipus": "Dessalat",
+	"descripcio": "Textura suau i sabor net."
+}
+```
+
+## Rutes Frontend
+
+- `/` portada amb resum
+- `/bacalla` llistat
+- `/bacalla/[id]` detall
+- `/afegir` formulari interactiu
+
+## Desplegament
+
+### Frontend (Vercel)
+
+- Deploy del projecte Next.js
+- Variable: `NEXT_PUBLIC_API_BASE_URL=https://api-bacalla.onrender.com`
+
+## Nota
+
+Aquest projecte no inclou cap servidor Express local. Si necessites provar en local, arrenca el backend des del seu repositori i apunta `NEXT_PUBLIC_API_BASE_URL` a la seva URL.
