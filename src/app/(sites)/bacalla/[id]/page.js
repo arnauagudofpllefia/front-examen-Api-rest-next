@@ -1,6 +1,7 @@
 // Component de servidor asíncron per a la ruta /bacalla/[id]
 import Link from "next/link";
 import { getBacallaById } from "@/lib/api";
+import DeleteButton from "./DeleteButton";
 
 export default async function BacallaDetailPage({ params }) {
   // await params és necessari a Next.js 15+ perquè params és ara una Promise
@@ -55,6 +56,17 @@ export default async function BacallaDetailPage({ params }) {
               </svg>
               Llistat
             </Link>
+            {item && (
+              <>
+                <Link
+                  href={`/bacalla/${id}/editar`}
+                  className="px-4 py-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-sm font-medium hover:bg-yellow-500/20 hover:text-yellow-300 transition-all duration-200"
+                >
+                  Editar
+                </Link>
+                <DeleteButton id={id} />
+              </>
+            )}
             <Link
               href="/afegir"
               className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-[#020c1b] text-sm font-bold transition-all duration-200 hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] hover:-translate-y-px"
