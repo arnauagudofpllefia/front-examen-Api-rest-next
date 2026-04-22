@@ -1,19 +1,19 @@
 ﻿// Component de servidor asíncron: Next.js el renderitza al servidor i envia HTML estàtic
 import Link from "next/link";
-import { getBacallaList } from "@/lib/api";
+import { getMascotasList } from "@/lib/api";
 
-export default async function BacallaListPage() {
+export default async function MascotesListPage() {
   // Llista de varietats; s'omple si la petició té èxit
   let items = [];
   // Missatge d'error per mostrar a la UI si la petició falla
   let error = "";
 
   try {
-    const response = await getBacallaList();
-    // Normalitza la resposta: l'API pot retornar l'array directament o dins .data / .bacalla
+    const response = await getMascotasList();
+    // Normalitza la resposta: l'API pot retornar l'array directament o dins .data / .mascotas
     items = Array.isArray(response)
       ? response
-      : response?.data || response?.bacalla || [];
+      : response?.data || response?.mascotas || [];
     if (!Array.isArray(items)) items = [];
   } catch (loadError) {
     error = loadError.message || "No s'ha pogut carregar el llistat.";
@@ -29,14 +29,14 @@ export default async function BacallaListPage() {
         <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4">
-              Bacalla
+              Mascotas
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
-              Llistat de Varietats
+              Llistat de Mascotas
             </h1>
-            {/* Recompte dinàmic de varietats */}
+            {/* Recompte dinàmic de mascotas */}
             <p className="text-slate-400 text-sm">
-              {items.length} varietat{items.length !== 1 ? "s" : ""} disponibles
+              {items.length} mascota{items.length !== 1 ? "s" : ""} disponibles
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -60,7 +60,7 @@ export default async function BacallaListPage() {
       </header>
 
       {/* ── Alerta d'error ──────────────────────────────────────── */}
-      {/* Només visible si getBacallaList ha llançat una excepció */}
+      {/* Només visible si getMascotasList ha llançat una excepció */}
       {error && (
         <div className="animate-bounce-in flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-400 text-sm">
           {error}
@@ -74,9 +74,9 @@ export default async function BacallaListPage() {
             <thead>
               <tr className="border-b border-white/7">
                 <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500 w-16">ID</th>
-                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Nom</th>
-                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500 hidden sm:table-cell">Origen</th>
-                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500 hidden md:table-cell">Tipus</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Nombre</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500 hidden sm:table-cell">Tipo</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-widest text-slate-500 hidden md:table-cell">Raza</th>
                 <th className="px-5 py-3.5 text-right text-xs font-bold uppercase tracking-widest text-slate-500 w-24">Detall</th>
               </tr>
             </thead>
@@ -89,17 +89,17 @@ export default async function BacallaListPage() {
                   style={{ animationDelay: `${220 + i * 55}ms` }}
                 >
                   <td className="px-5 py-4 text-slate-500 font-mono text-xs">{item.id}</td>
-                  <td className="px-5 py-4 text-white font-medium">{item.nom}</td>
-                  <td className="px-5 py-4 text-slate-400 hidden sm:table-cell">{item.origen}</td>
+                  <td className="px-5 py-4 text-white font-medium">{item.nombre}</td>
+                  <td className="px-5 py-4 text-slate-400 hidden sm:table-cell">{item.tipo}</td>
                   <td className="px-5 py-4 hidden md:table-cell">
-                    {/* El camp "tipus" es mostra com a badge de color cyan */}
+                    {/* El camp "raza" es mostra com a badge de color cyan */}
                     <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium">
-                      {item.tipus}
+                      {item.raza}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-right">
                     <Link
-                      href={`/bacalla/${item.id}`}
+                      href={`/mascotas/${item.id}`}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-xs font-medium hover:bg-cyan-500/10 hover:border-cyan-500/30 hover:text-cyan-300 transition-all duration-150"
                     >
                       Veure

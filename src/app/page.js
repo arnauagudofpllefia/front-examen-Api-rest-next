@@ -4,13 +4,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getBacallaList, getHealth } from "@/lib/api";
+import { getMascotasList, getHealth } from "@/lib/api";
 
 export default function Home() {
   // Guarda la resposta de GET /health (null mentre carrega)
   const [health, setHealth] = useState(null);
   // Nombre total de varietats a l'API (null mentre carrega)
-  const [bacallaCount, setBacallaCount] = useState(null);
+  const [mascotaCount, setMascotaCount] = useState(null);
   // Missatge d'error visible a la UI
   const [error, setError] = useState("");
 
@@ -18,21 +18,21 @@ export default function Home() {
   async function loadOverview() {
     setError("");
     // Promise.allSettled continua encara que una petició falli
-    const [healthResult, bacallaResult] = await Promise.allSettled([
+    const [healthResult, mascotaResult] = await Promise.allSettled([
       getHealth(),
-      getBacallaList(),
+      getMascotasList(),
     ]);
 
     if (healthResult.status === "fulfilled") {
       setHealth(healthResult.value);
     }
 
-    if (bacallaResult.status === "fulfilled") {
-      // L'API pot retornar l'array directament o dins .data / .bacalla
-      const list = Array.isArray(bacallaResult.value)
-        ? bacallaResult.value
-        : bacallaResult.value?.data || bacallaResult.value?.bacalla || [];
-      setBacallaCount(Array.isArray(list) ? list.length : 0);
+    if (mascotaResult.status === "fulfilled") {
+      // L'API pot retornar l'array directament o dins .data / .mascotas
+      const list = Array.isArray(mascotaResult.value)
+        ? mascotaResult.value
+        : mascotaResult.value?.data || mascotaResult.value?.mascotas || [];
+      setMascotaCount(Array.isArray(list) ? list.length : 0);
     } else {
       setError("No s'ha pogut carregar les dades de l'API.");
     }
@@ -63,14 +63,14 @@ export default function Home() {
             Panel Principal
           </div>
 
-          {/* Títol principal: "Bacalla REST" porta un gradient animat (shimmer) */}
+          {/* Títol principal: "Mascotas REST" porta un gradient animat (shimmer) */}
           <h1 className="text-5xl md:text-7xl font-bold text-white leading-none mb-4">
             Projecte{" "}
             <span
               className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 via-sky-300 to-blue-400 animate-shimmer"
               style={{ backgroundSize: "200% auto" }}
             >
-              Bacalla REST
+              Mascotas REST
             </span>
           </h1>
 
@@ -117,7 +117,7 @@ export default function Home() {
       {/* 3 targetes (health, varietats, endpoint) amb retard escalonat (stagger) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: "Colleccio", value: bacallaCount === null ? "..." : bacallaCount, sub: "varietats disponibles", color: "text-cyan-300", delay: "0ms" },
+          { label: "Colleccio", value: mascotaCount === null ? "..." : mascotaCount, sub: "mascotas disponibles", color: "text-cyan-300", delay: "0ms" },
           { label: "Endpoints", value: "3", sub: "GET / GET :id / POST", color: "text-blue-300", delay: "120ms" },
           { label: "Estat", value: isOnline ? "ON" : health === null ? "..." : "OFF", sub: "connexio amb l API", color: isOnline ? "text-emerald-300" : "text-slate-400", delay: "240ms" },
         ].map(({ label, value, sub, color, delay }) => (
@@ -138,7 +138,7 @@ export default function Home() {
       {/* Dos Link grans que porten al llistat i al formulari d'alta */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Link
-          href="/bacalla"
+          href="/mascotas"
           className="group relative overflow-hidden rounded-2xl border border-white/8 bg-linear-to-br from-[#0c1e3d] to-[#071428] p-7 transition-all duration-300 hover:border-cyan-500/40 hover:shadow-[0_0_50px_rgba(6,182,212,0.12)] hover:-translate-y-1 animate-fade-up [animation-delay:360ms]"
         >
           <div className="absolute inset-0 bg-linear-to-br from-cyan-500/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />

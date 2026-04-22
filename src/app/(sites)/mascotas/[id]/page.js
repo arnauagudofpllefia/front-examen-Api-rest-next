@@ -1,9 +1,9 @@
-// Component de servidor asíncron per a la ruta /bacalla/[id]
+// Component de servidor asíncron per a la ruta /mascotas/[id]
 import Link from "next/link";
-import { getBacallaById } from "@/lib/api";
+import { getMascotaById } from "@/lib/api";
 import DeleteButton from "./DeleteButton";
 
-export default async function BacallaDetailPage({ params }) {
+export default async function MascotaDetailPage({ params }) {
   // await params és necessari a Next.js 15+ perquè params és ara una Promise
   const { id } = await params;
   // Dades de la varietat (null si la petició falla)
@@ -12,7 +12,7 @@ export default async function BacallaDetailPage({ params }) {
   let error = "";
 
   try {
-    item = await getBacallaById(id);
+    item = await getMascotaById(id);
   } catch (loadError) {
     error = loadError.message || "No s'ha pogut carregar el detall de la varietat.";
   }
@@ -21,11 +21,11 @@ export default async function BacallaDetailPage({ params }) {
   // mono=true → font monospace; badge=true → pill de color cyan
   const fields = item
     ? [
-        { label: "ID",          value: item.id,         mono: true  },
-        { label: "Nom",         value: item.nom                      },
-        { label: "Origen",      value: item.origen                   },
-        { label: "Tipus",       value: item.tipus,      badge: true  },
-        { label: "Descripcio",  value: item.descripcio               },
+        { label: "ID",      value: item.id,      mono: true  },
+        { label: "Nombre",  value: item.nombre               },
+        { label: "Tipo",    value: item.tipo,    badge: true  },
+        { label: "Raza",    value: item.raza                  },
+        { label: "Foto",    value: item.foto                  },
       ]
     : [];
 
@@ -42,13 +42,13 @@ export default async function BacallaDetailPage({ params }) {
               Detall &middot; #{id}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
-              {item ? item.nom : `Varietat ${id}`}
+              {item ? item.nombre : `Mascota ${id}`}
             </h1>
-            <p className="text-slate-400 text-sm">Fitxa completa de la varietat.</p>
+            <p className="text-slate-400 text-sm">Fitxa completa de la mascota.</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Link
-              href="/bacalla"
+              href="/mascotas"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all duration-200"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -59,7 +59,7 @@ export default async function BacallaDetailPage({ params }) {
             {item && (
               <>
                 <Link
-                  href={`/bacalla/${id}/editar`}
+                  href={`/mascotas/${id}/editar`}
                   className="px-4 py-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-sm font-medium hover:bg-yellow-500/20 hover:text-yellow-300 transition-all duration-200"
                 >
                   Editar
@@ -78,7 +78,7 @@ export default async function BacallaDetailPage({ params }) {
       </header>
 
       {/* ── Alerta d'error ──────────────────────────────────────── */}
-      {/* Visible si getBacallaById ha llançat una excepció */}
+      {/* Visible si getMascotaById ha llançat una excepció */}
       {error && (
         <div className="animate-bounce-in flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-400">
           {error}

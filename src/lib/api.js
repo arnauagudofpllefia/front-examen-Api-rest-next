@@ -45,33 +45,33 @@ export async function getHealth() {
   return request("/health", { method: "GET" });
 }
 
-// GET /api/bacalla — retorna el llistat complet de varietats
-export async function getBacallaList() {
+// GET /api/mascotas — retorna el llistat complet de mascotas
+export async function getMascotasList() {
   return request("/api/mascotas", { method: "GET" });
 }
 
-// GET /api/bacalla/:id — retorna el detall d'una varietat per id
-export async function getBacallaById(id) {
+// GET /api/mascotas/:id — retorna el detall d'una mascota per id
+export async function getMascotaById(id) {
   return request(`/api/mascotas/${id}`, { method: "GET" });
 }
 
-// POST /api/bacalla — crea una nova varietat amb les dades del formulari
-export async function createBacalla(data) {
+// POST /api/mascotas — crea una nova mascota amb les dades del formulari
+export async function createMascota(data) {
   return request("/api/mascotas", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-// PUT /api/bacalla/:id — actualitza una varietat existent
-export async function updateBacalla(id, data) {
+// PUT /api/mascotas/:id — actualitza una mascota existent
+export async function updateMascota(id, data) {
   return request(`/api/mascotas/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });
 }
 
-// DELETE /api/bacalla/:id — elimina una varietat per id
-export async function deleteBacalla(id) {
+// DELETE /api/mascotas/:id — elimina una mascota per id
+export async function deleteMascota(id) {
   return request(`/api/mascotas/${id}`, { method: "DELETE" });
 }

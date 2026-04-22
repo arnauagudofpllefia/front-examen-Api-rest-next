@@ -3,19 +3,19 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getBacallaById, updateBacalla } from "@/lib/api";
+import { getMascotaById, updateMascota } from "@/lib/api";
 
 const FIELDS = [
-  { key: "nom",        label: "Nom de la varietat", placeholder: "ex. Bacalla negre del Pacific", type: "input"    },
-  { key: "origen",     label: "Origen o regio",      placeholder: "ex. Nova Escocia",              type: "input"    },
-  { key: "tipus",      label: "Tipus o presentacio", placeholder: "ex. Assecat i salat",           type: "input"    },
-  { key: "descripcio", label: "Descripcio curta",    placeholder: "Peix blanc de carn ferma...",   type: "textarea" },
+  { key: "nombre", label: "Nombre",  placeholder: "ex. Wilson",         type: "input"    },
+  { key: "tipo",   label: "Tipo",    placeholder: "ex. Perro",          type: "input"    },
+  { key: "raza",   label: "Raza",    placeholder: "ex. Fox Terrier",    type: "input"    },
+  { key: "foto",   label: "Foto",    placeholder: "URL de la foto",     type: "input"    },
 ];
 
 export default function EditarPage({ params }) {
   const router = useRouter();
   const [id, setId] = useState(null);
-  const [form, setForm]     = useState({ nom: "", origen: "", tipus: "", descripcio: "" });
+  const [form, setForm]     = useState({ nombre: "", tipo: "", raza: "", foto: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError]   = useState("");
@@ -26,12 +26,12 @@ export default function EditarPage({ params }) {
       const { id: resolvedId } = await params;
       setId(resolvedId);
       try {
-        const item = await getBacallaById(resolvedId);
+        const item = await getMascotaById(resolvedId);
         setForm({
-          nom:        item.nom        ?? "",
-          origen:     item.origen     ?? "",
-          tipus:      item.tipus      ?? "",
-          descripcio: item.descripcio ?? "",
+          nombre: item.nombre ?? "",
+          tipo:   item.tipo   ?? "",
+          raza:   item.raza   ?? "",
+          foto:   item.foto   ?? "",
         });
       } catch (err) {
         setError(err.message || "No s'ha pogut carregar la varietat.");
@@ -50,19 +50,19 @@ export default function EditarPage({ params }) {
 
     try {
       const payload = {
-        nom:        form.nom.trim(),
-        origen:     form.origen.trim(),
-        tipus:      form.tipus.trim(),
-        descripcio: form.descripcio.trim(),
+        nombre: form.nombre.trim(),
+        tipo:   form.tipo.trim(),
+        raza:   form.raza.trim(),
+        foto:   form.foto.trim(),
       };
 
-      if (!payload.nom || !payload.origen || !payload.tipus || !payload.descripcio) {
-        throw new Error("Has d'omplir tots els camps.");
+      if (!payload.nombre || !payload.tipo || !payload.raza) {
+        throw new Error("Has d'omplir els camps obligatoris.");
       }
 
-      await updateBacalla(id, payload);
+      await updateMascota(id, payload);
       setSuccess(true);
-      router.push(`/bacalla/${id}`);
+      router.push(`/mascotas/${id}`);
       router.refresh();
     } catch (err) {
       setError(err.message || "No s'ha pogut actualitzar la varietat.");
@@ -94,7 +94,7 @@ export default function EditarPage({ params }) {
             </p>
           </div>
           <Link
-            href={id ? `/bacalla/${id}` : "/bacalla"}
+            href={id ? `/mascotas/${id}` : "/mascotas"}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all duration-200 shrink-0"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

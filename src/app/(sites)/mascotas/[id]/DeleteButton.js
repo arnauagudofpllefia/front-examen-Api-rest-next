@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { deleteBacalla } from "@/lib/api";
+import { deleteMascota } from "@/lib/api";
 
 export default function DeleteButton({ id }) {
   const router = useRouter();
@@ -14,8 +14,8 @@ export default function DeleteButton({ id }) {
     setDeleting(true);
     setError("");
     try {
-      await deleteBacalla(id);
-      router.push("/bacalla");
+      await deleteMascota(id);
+      router.push("/mascotas");
       router.refresh();
     } catch (err) {
       setError(err.message || "No s'ha pogut eliminar la varietat.");

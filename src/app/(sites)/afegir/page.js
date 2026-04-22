@@ -4,18 +4,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { createBacalla } from "@/lib/api";
+import { createMascota } from "@/lib/api";
 
 // Estat inicial del formulari; també s'usa per resetejar-lo després d'un POST correcte
-const initialForm = { nom: "", origen: "", tipus: "", descripcio: "" };
+const initialForm = { nombre: "", tipo: "", raza: "", foto: "" };
 
 // Definició dels camps del formulari:
 // key → clau del payload | type → "input" o "textarea" (renderitza el control adequat)
 const FIELDS = [
-  { key: "nom",       label: "Nom de la varietat",  placeholder: "ex. Bacalla negre del Pacific",  type: "input"    },
-  { key: "origen",    label: "Origen o regio",       placeholder: "ex. Nova Escocia",               type: "input"    },
-  { key: "tipus",     label: "Tipus o presentacio",  placeholder: "ex. Assecat i salat",            type: "input"    },
-  { key: "descripcio",label: "Descripcio curta",     placeholder: "Peix blanc de carn ferma...",    type: "textarea" },
+  { key: "nombre", label: "Nombre",  placeholder: "ex. Wilson",         type: "input"    },
+  { key: "tipo",   label: "Tipo",    placeholder: "ex. Perro",          type: "input"    },
+  { key: "raza",   label: "Raza",    placeholder: "ex. Fox Terrier",    type: "input"    },
+  { key: "foto",   label: "Foto",    placeholder: "URL de la foto",     type: "input"    },
 ];
 
 export default function AfegirPage() {
@@ -31,7 +31,7 @@ export default function AfegirPage() {
   // Gestiona l'enviament del formulari:
   // 1. Prevé el reload natiu
   // 2. Valida que tots els camps estiguin omplerts
-  // 3. Fa POST a /api/bacalla
+  // 3. Fa POST a /api/mascotas
   // 4. En cas d'èxit: mostra la resposta i reseteja el formulari
   // 5. En cas d'error: mostra el missatge d'error
   async function handleSubmit(e) {
@@ -42,18 +42,18 @@ export default function AfegirPage() {
 
     try {
       const payload = {
-        nom:       form.nom.trim(),
-        origen:    form.origen.trim(),
-        tipus:     form.tipus.trim(),
-        descripcio:form.descripcio.trim(),
+        nombre: form.nombre.trim(),
+        tipo:   form.tipo.trim(),
+        raza:   form.raza.trim(),
+        foto:   form.foto.trim(),
       };
 
-      // Validació bàsica: cap camp pot estar buit
-      if (!payload.nom || !payload.origen || !payload.tipus || !payload.descripcio) {
-        throw new Error("Has d'omplir tots els camps.");
+      // Validació bàsica: els camps obligatoris no poden estar buits
+      if (!payload.nombre || !payload.tipo || !payload.raza) {
+        throw new Error("Has d'omplir els camps obligatoris.");
       }
 
-      const result = await createBacalla(payload);
+      const result = await createMascota(payload);
       setCreated(result);
       // Reseteja el formulari als valors inicials buits
       setForm(initialForm);
@@ -90,7 +90,7 @@ export default function AfegirPage() {
             </p>
           </div>
           <Link
-            href="/bacalla"
+            href="/mascotas"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all duration-200 shrink-0"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
